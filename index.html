@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoseImageNet — Pose Estimation for Extensive Classes Based on Rich Structure Prototypes</title>
+<meta name="description" content="PoseImageNet is a pose dataset built on ImageNet, covering extensive object classes through rich structure prototypes.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="ph-strip">
+  <div class="wrap">
+    <span class="ph-tag">Data updated</span>
+    <span>Dataset statistics, superclass assignments, and sample overlays use the provided final annotation files. The definition and annotation figures remain preview illustrations.</span>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">PoseImageNet</a>
+    <nav>
+      <a href="#definition">Definition</a>
+      <a href="#statistics">Statistics</a>
+      <a href="#samples">Samples</a>
+      <a href="#annotation">Annotation</a>
+      <a href="#citation">Citation</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ────────────────────────────── ① Overview ────────────────────────────── -->
+  <section class="hero">
+    <div class="wrap">
+      <h1>PoseImageNet</h1>
+      <p class="subtitle">Pose Estimation for Extensive Classes Based on Rich Structure Prototypes</p>
+
+      <p class="lead">
+        PoseImageNet is a pose dataset built on ImageNet, covering an unusually wide range of
+        object classes and object structures. Because a single semantic class frequently contains
+        objects that cannot be deformed into one another, the class is partitioned into
+        <b>structure prototypes</b> — subsets of objects that share one keypoint definition. Every
+        object pose in the dataset comes with its keypoint annotation and the prototype label that
+        identifies the deformable set it belongs to.
+      </p>
+
+      <div class="statbar" id="statbar"></div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────── ② Definition ────────────────────────────── -->
+  <section class="sec" id="definition">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">01 — Definition</span>
+        <h2>From a semantic class to structure prototypes</h2>
+      </div>
+      <p class="dek">
+        A semantic class is first split into subsets by structure, then pose is annotated inside
+        each subset. The split is what makes pose estimation well posed for classes whose objects
+        do not all share one skeleton.
+      </p>
+
+      <figure>
+        <div class="fig-frame">
+          <svg viewBox="0 0 1000 386" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+            <title>From a semantic class to structure prototypes</title>
+            <desc>A semantic class is partitioned into prototypes by keypoint topology. Samples inside one prototype share the same keypoint definition and can be warped into each other with a thin-plate spline; samples in different prototypes cannot.</desc>
+            <defs>
+              <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </marker>
+              <g id="sk4">
+                <path d="M17 19 L49 17 L47 47 L19 49 Z" fill="none" stroke="#8fb3d9" stroke-width="1.2"/>
+                <circle cx="17" cy="19" r="2.8" fill="#1b4f8f"/>
+                <circle cx="49" cy="17" r="2.8" fill="#1b4f8f"/>
+                <circle cx="47" cy="47" r="2.8" fill="#1b4f8f"/>
+                <circle cx="19" cy="49" r="2.8" fill="#1b4f8f"/>
+              </g>
+              <g id="sk6">
+                <path d="M14 22 L33 13 L52 22 L49 48 L33 57 L17 48 Z" fill="none" stroke="#8fb3d9" stroke-width="1.2"/>
+                <circle cx="14" cy="22" r="2.6" fill="#1b4f8f"/>
+                <circle cx="33" cy="13" r="2.6" fill="#1b4f8f"/>
+                <circle cx="52" cy="22" r="2.6" fill="#1b4f8f"/>
+                <circle cx="49" cy="48" r="2.6" fill="#1b4f8f"/>
+                <circle cx="33" cy="57" r="2.6" fill="#1b4f8f"/>
+                <circle cx="17" cy="48" r="2.6" fill="#1b4f8f"/>
+              </g>
+              <g id="sk8">
+                <path d="M14 24 L28 12 L48 15 L56 32 L48 49 L30 56 L14 45 L8 32 Z" fill="none" stroke="#8fb3d9" stroke-width="1.2"/>
+                <circle cx="14" cy="24" r="2.4" fill="#1b4f8f"/>
+                <circle cx="28" cy="12" r="2.4" fill="#1b4f8f"/>
+                <circle cx="48" cy="15" r="2.4" fill="#1b4f8f"/>
+                <circle cx="56" cy="32" r="2.4" fill="#1b4f8f"/>
+                <circle cx="48" cy="49" r="2.4" fill="#1b4f8f"/>
+                <circle cx="30" cy="56" r="2.4" fill="#1b4f8f"/>
+                <circle cx="14" cy="45" r="2.4" fill="#1b4f8f"/>
+                <circle cx="8" cy="32" r="2.4" fill="#1b4f8f"/>
+              </g>
+            </defs>
+
+            <rect x="400" y="40" width="200" height="46" rx="8" fill="#eaf1f9" stroke="#1b4f8f" stroke-width="1"/>
+            <text x="500" y="64" text-anchor="middle" dominant-baseline="central" font-family="Georgia, serif" font-size="17" font-weight="700" fill="#14375f">Semantic class</text>
+
+            <path d="M500 86 V108 H173 V132" fill="none" stroke="#8fb3d9" stroke-width="1.2" marker-end="url(#ar)"/>
+            <path d="M500 86 V132" fill="none" stroke="#8fb3d9" stroke-width="1.2" marker-end="url(#ar)"/>
+            <path d="M500 86 V108 H827 V132" fill="none" stroke="#8fb3d9" stroke-width="1.2" marker-end="url(#ar)"/>
+            <text x="514" y="102" font-size="14" fill="#5f6a78">split by structure</text>
+
+            <g>
+              <rect x="40" y="140" width="266" height="180" rx="12" fill="#f7f9fc" stroke="#cfdae7" stroke-width="1"/>
+              <text x="173" y="168" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="600" fill="#14375f">Prototype A</text>
+              <text x="173" y="190" text-anchor="middle" dominant-baseline="central" font-size="13" fill="#5f6a78">4 keypoints</text>
+              <rect x="60" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <rect x="140" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <rect x="220" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <use href="#sk4" x="60" y="206"/>
+              <use href="#sk4" x="140" y="206"/>
+              <use href="#sk4" x="220" y="206"/>
+              <path d="M64 292 H282" fill="none" stroke="#1b4f8f" stroke-width="1.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+              <text x="173" y="308" text-anchor="middle" dominant-baseline="central" font-size="13" fill="#1b4f8f">deformable</text>
+            </g>
+
+            <g>
+              <rect x="367" y="140" width="266" height="180" rx="12" fill="#f7f9fc" stroke="#cfdae7" stroke-width="1"/>
+              <text x="500" y="168" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="600" fill="#14375f">Prototype B</text>
+              <text x="500" y="190" text-anchor="middle" dominant-baseline="central" font-size="13" fill="#5f6a78">6 keypoints</text>
+              <rect x="387" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <rect x="467" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <rect x="547" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <use href="#sk6" x="387" y="206"/>
+              <use href="#sk6" x="467" y="206"/>
+              <use href="#sk6" x="547" y="206"/>
+              <path d="M391 292 H609" fill="none" stroke="#1b4f8f" stroke-width="1.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+              <text x="500" y="308" text-anchor="middle" dominant-baseline="central" font-size="13" fill="#1b4f8f">deformable</text>
+            </g>
+
+            <g>
+              <rect x="694" y="140" width="266" height="180" rx="12" fill="#f7f9fc" stroke="#cfdae7" stroke-width="1"/>
+              <text x="827" y="168" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="600" fill="#14375f">Prototype C</text>
+              <text x="827" y="190" text-anchor="middle" dominant-baseline="central" font-size="13" fill="#5f6a78">8 keypoints</text>
+              <rect x="714" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <rect x="794" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <rect x="874" y="206" width="66" height="66" rx="6" fill="#ffffff" stroke="#cfdae7" stroke-width="1"/>
+              <use href="#sk8" x="714" y="206"/>
+              <use href="#sk8" x="794" y="206"/>
+              <use href="#sk8" x="874" y="206"/>
+              <path d="M718 292 H936" fill="none" stroke="#1b4f8f" stroke-width="1.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+              <text x="827" y="308" text-anchor="middle" dominant-baseline="central" font-size="13" fill="#1b4f8f">deformable</text>
+            </g>
+
+            <path d="M336 150 V310" fill="none" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="5 5"/>
+            <circle cx="336" cy="230" r="12" fill="#ffffff" stroke="#c0392b" stroke-width="1.2"/>
+            <path d="M330 224 L342 236 M342 224 L330 236" fill="none" stroke="#c0392b" stroke-width="1.6" stroke-linecap="round"/>
+
+            <path d="M664 150 V310" fill="none" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="5 5"/>
+            <circle cx="664" cy="230" r="12" fill="#ffffff" stroke="#c0392b" stroke-width="1.2"/>
+            <path d="M658 224 L670 236 M670 224 L658 236" fill="none" stroke="#c0392b" stroke-width="1.6" stroke-linecap="round"/>
+
+            <path d="M40 360 H70" fill="none" stroke="#1b4f8f" stroke-width="1.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+            <text x="82" y="360" dominant-baseline="central" font-size="14" fill="#5f6a78">same keypoint definition — TPS warp is defined</text>
+
+            <circle cx="522" cy="360" r="9" fill="#ffffff" stroke="#c0392b" stroke-width="1.2"/>
+            <path d="M518 356 L526 364 M526 356 L518 364" fill="none" stroke="#c0392b" stroke-width="1.6" stroke-linecap="round"/>
+            <text x="540" y="360" dominant-baseline="central" font-size="14" fill="#5f6a78">different keypoint count or topology — no warp exists</text>
+          </svg>
+        </div>
+        <figcaption>
+          <b>Figure 1.</b> A semantic class is partitioned into structure prototypes by keypoint
+          topology. Within a prototype every sample shares the same keypoint count and semantic
+          index, so a thin-plate-spline warp between any two samples is well defined; this is what
+          makes "the pose of an object" a meaningful quantity. Across prototypes the keypoint count
+          or the correspondence differs, and no such warp exists. Prior multi-class pose datasets —
+          UniKPT, MP-100, PIN++ — keep a single prototype per class and therefore cannot represent
+          this within-class structural variation.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────── ③ Statistics ────────────────────────────── -->
+  <section class="sec alt" id="statistics">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">02 — Statistics</span>
+        <h2>Scale and structure of the dataset</h2>
+      </div>
+      <p class="dek">
+        One overview of how the dataset is spread across superclasses, and two views of its
+        structure: how many keypoints a prototype carries, and how many prototypes a semantic
+        class splits into.
+      </p>
+
+      <div class="card card-wide">
+        <h3>Prototypes per superclass</h3>
+        <p class="sub" id="mainSub"></p>
+        <div class="chart" id="chartSuper"></div>
+      </div>
+
+      <div class="charts-row">
+        <div class="card">
+          <h3>Keypoints per prototype</h3>
+          <p class="sub" id="kpSub"></p>
+          <div class="chart" id="chartKp"></div>
+        </div>
+        <div class="card">
+          <h3>Prototypes per semantic class</h3>
+          <p class="sub" id="pcSub"></p>
+          <div class="chart" id="chartPc"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────── ④ Samples ────────────────────────────── -->
+  <section class="sec" id="samples">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">03 — Samples</span>
+        <h2>Structure prototypes from each superclass</h2>
+      </div>
+      <p class="dek">
+        One semantic object class is selected from each of the 13 superclasses. Each row shows
+        six different structure prototypes from that semantic class; hover over an image to see
+        its prototype name, keypoint count, and object-pose count.
+      </p>
+      <div class="gallery" id="gallery"></div>
+      <p class="fig-note">
+        Images are copied from the supplied annotated visualisations
+        (<code>*_pose_overlay.jpg</code>).
+      </p>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────── ⑤ Annotation ────────────────────────────── -->
+  <section class="sec alt" id="annotation">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">04 — Annotation</span>
+        <h2>How to read the annotation</h2>
+      </div>
+
+      <div class="ann-grid">
+        <figure class="ann-fig">
+          <div class="fig-frame">
+            <svg viewBox="0 0 300 284" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+              <title>An annotated sample</title>
+              <desc>One image tile with eight numbered keypoints joined by a skeleton. Each keypoint carries an x, y coordinate and a visibility flag.</desc>
+              <rect x="24" y="20" width="240" height="240" rx="8" fill="#f2f4f7" stroke="#cfdae7" stroke-width="1"/>
+              <polygon points="74,66 126,54 178,70 196,118 176,180 128,200 76,182 52,120"
+                       fill="#dfe4ea" stroke="#c9d1da" stroke-width="1"/>
+              <path d="M74 66 L126 54 L178 70 L196 118 L176 180 L128 200 L76 182 L52 120 Z"
+                    fill="none" stroke="#8fb3d9" stroke-width="1.2"/>
+              <circle cx="74" cy="66" r="4" fill="#1b4f8f"/>
+              <circle cx="126" cy="54" r="4" fill="#1b4f8f"/>
+              <circle cx="178" cy="70" r="4" fill="#1b4f8f"/>
+              <circle cx="196" cy="118" r="4" fill="#1b4f8f"/>
+              <circle cx="176" cy="180" r="4" fill="#1b4f8f"/>
+              <circle cx="128" cy="200" r="4" fill="#1b4f8f"/>
+              <circle cx="76" cy="182" r="4" fill="#1b4f8f"/>
+              <circle cx="52" cy="120" r="4" fill="#1b4f8f"/>
+              <g font-size="12" font-family="Georgia, serif" fill="#14375f" text-anchor="middle" dominant-baseline="central">
+                <text x="62" y="54">1</text>
+                <text x="123" y="38">2</text>
+                <text x="188" y="56">3</text>
+                <text x="212" y="116">4</text>
+                <text x="186" y="194">5</text>
+                <text x="126" y="216">6</text>
+                <text x="63" y="193">7</text>
+                <text x="36" y="119">8</text>
+              </g>
+            </svg>
+          </div>
+          <figcaption><b>Figure 2.</b> One annotated sample. Keypoints are ordered by semantic index within the prototype, so index <i>i</i> always denotes the same part across every image of that prototype.</figcaption>
+        </figure>
+
+        <div class="ann-text">
+          <h3>Fields</h3>
+          <table class="field-table">
+            <tbody>
+              <tr><td><code>images[].file_name</code></td><td>Image path and file name.</td></tr>
+              <tr><td><code>annotations[].category_id</code></td><td>Structure prototype this image belongs to — the deformable set.</td></tr>
+              <tr><td><code>annotations[].keypoints</code></td><td>Flat array <code>[x₁,y₁,v₁, x₂,y₂,v₂, …]</code> in image coordinates.</td></tr>
+              <tr><td><code>annotations[].num_keypoints</code></td><td>Number of keypoints <i>K</i> of this annotation.</td></tr>
+              <tr><td><code>annotations[].bbox</code></td><td>Bounding box of the annotated object.</td></tr>
+              <tr><td><code>categories[].supercategory</code></td><td>The semantic class the prototype belongs to.</td></tr>
+              <tr><td><code>categories[].info</code></td><td>Human-readable description and source information for the structure prototype.</td></tr>
+              <tr><td><code>categories[].canonical_sample_id</code></td><td><code>images[].id</code> of the prototype's canonical sample; <code>null</code> when unavailable.</td></tr>
+            </tbody>
+          </table>
+
+          <h3 class="mt">Loading an annotation</h3>
+<pre class="code" id="loaderCode"></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────── ⑥ Citation ────────────────────────────── -->
+  <section class="sec" id="citation">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">05 — Citation</span>
+        <h2>BibTeX</h2>
+      </div>
+      <div class="cite-head">
+        <p class="dek no-mb" id="citeNote"></p>
+        <button class="btn" id="copyBtn" type="button">Copy</button>
+      </div>
+<pre class="code" id="bibtex"></pre>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <h4>License and attribution</h4>
+    <p>
+      Annotations are released for research use. Images derive from ImageNet; please follow the
+      terms of the original ImageNet release when using them.
+    </p>
+    <p class="muted" id="buildInfo"></p>
+  </div>
+</footer>
+
+<script src="data/site-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
